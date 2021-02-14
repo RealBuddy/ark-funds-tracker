@@ -10,7 +10,6 @@ cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 cursor.execute("select * from stock where is_etf = TRUE")
 
 etfs = cursor.fetchall()
-
 dates = ['2021-01-25', '2021-01-26']
 
 for current_date in dates:
@@ -19,6 +18,7 @@ for current_date in dates:
 
         with open(f"data/{current_date}/{etf['symbol']}.csv") as f:
             reader = csv.reader(f)
+            print(reader)
             next(reader)
             for row in reader:
                 ticker = row[3]

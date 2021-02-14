@@ -7,7 +7,7 @@ connection = psycopg2.connect(host=config.DB_HOST, database=config.DB_NAME, user
 
 cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-api = tradeapi.REST(config.API_KEY, config.API_SECRET, base_url=config.API_URL)
+api = tradeapi.REST(config.API_KEY, config.SECRET_KEY, base_url=config.API_URL)
 
 assets = api.list_assets()
 
@@ -18,4 +18,8 @@ for asset in assets:
         VALUES (%s, %s, %s, false)
     """, (asset.name, asset.symbol, asset.exchange))
 
+cursor.execute("""
+    UPDATE stock SET is_etf = TRUE
+    WHERE symbol IN ('ARKK', 'ARKQ', 'PRNT', 'IZRL', 'ARKG', 'ARKF', 'ARKW');
+""")
 connection.commit()
